@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Converter</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: black;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            background: #f7f7f7;
+            resize: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        #copyButton {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+        #message {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text Converter</h1>
+        <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+        <div class="buttons">
+            <button id="uppercaseButton">Uppercase</button>
+            <button id="lowercaseButton">Lowercase</button>
+            <button id="capitalizeButton">Capitalize Each Word</button>
+        </div>
+        <textarea id="textOutput" readonly placeholder="Converted text will appear here..."></textarea>
+        <button id="copyButton">Copy Text</button>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        function capitalizeEachWord(text) {
+            return text.replace(/\b\w/g, char => char.toUpperCase());
+        }
+
+        document.getElementById('textInput').addEventListener('input', () => {
+            const input = document.getElementById('textInput').value;
+            document.getElementById('textOutput').value = capitalizeEachWord(input);
+        });
+
+        function copyText() {
+            const textOutput = document.getElementById('textOutput');
+            textOutput.select();
+            document.execCommand('copy');
+
+            const message = document.getElementById('message');
+            message.textContent = 'Text copied to clipboard!';
+            setTimeout(() => message.textContent = '', 2000); // Clear the message after 2 seconds
+        }
+
+        document.getElementById('uppercaseButton').addEventListener('click', () => {
+            const input = document.getElementById('textInput').value.toUpperCase();
+            document.getElementById('textOutput').value = input;
+        });
+
+        document.getElementById('lowercaseButton').addEventListener('click', () => {
+            const input = document.getElementById('textInput').value.toLowerCase();
+            document.getElementById('textOutput').value = input;
+        });
+
+        document.getElementById('capitalizeButton').addEventListener('click', () => {
+            const input = document.getElementById('textInput').value;
+            document.getElementById('textOutput').value = capitalizeEachWord(input);
+        });
+
+        document.getElementById('copyButton').addEventListener('click', copyText);
+    </script>
+</body>
+</html>
