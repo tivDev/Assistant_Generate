@@ -43,12 +43,13 @@
         }
         .buttons {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
             margin-bottom: 15px;
         }
         button {
             flex: 1;
-            margin: 0 5px;
+            max-width: 170px;
+            margin: 5px;
             padding: 10px;
             border: none;
             border-radius: 8px;
@@ -57,7 +58,8 @@
             background: linear-gradient(135deg, #ff6a00, #ee0979);
             color: #fff;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.5s ease, box-shadow 0.2s ease;
+            white-space: nowrap; /* Prevent text wrapping */
         }
         button:hover {
             transform: translateY(-2px);
@@ -68,7 +70,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         #copyButton {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            background: #0072ff;
         }
         #message {
             color: green;
@@ -87,6 +89,10 @@
             <button id="uppercaseButton">Uppercase</button>
             <button id="lowercaseButton">Lowercase</button>
             <button id="capitalizeButton">Capitalize Each Word</button>
+            <button id="addHyphenButton">Add Hyphen</button>
+            <button id="addUnderscoreButton">Add Underscore</button>
+            <button id="removeSpacesButton">Remove All Spaces</button>
+            <button id="reverseButton">Original Text</button>
         </div>
         <textarea id="textOutput" readonly placeholder="Converted text will appear here..."></textarea>
         <button id="copyButton">Copy Text</button>
@@ -94,16 +100,92 @@
     </div>
 
     <script>
+        let transformation = null; // Global variable to keep track of current transformation
+
         function capitalizeEachWord(text) {
             return text.replace(/\b\w/g, char => char.toUpperCase());
         }
 
-        document.getElementById('textInput').addEventListener('input', () => {
+        function addHyphen(text) {
+            return text.split(' ').join('-');
+        }
+
+        function addUnderscore(text) {
+            return text.split(' ').join('_');
+        }
+
+        function removeSpaces(text) {
+            return text.replace(/\s+/g, ''); // Remove all spaces
+        }
+
+        function reverseText(text) {
+            return text.split('').reverse().join('');
+        }
+
+        function applyTransformation(text) {
+            switch (transformation) {
+                case 'uppercase':
+                    return text.toUpperCase();
+                case 'lowercase':
+                    return text.toLowerCase();
+                case 'capitalize':
+                    return capitalizeEachWord(text);
+                case 'hyphen':
+                    return addHyphen(text);
+                case 'underscore':
+                    return addUnderscore(text);
+                case 'removeSpaces':
+                    return removeSpaces(text);
+                case 'reverse':
+                    return reverseText(text);
+                default:
+                    return text;
+            }
+        }
+
+        function updateOutput() {
             const input = document.getElementById('textInput').value;
-            document.getElementById('textOutput').value = capitalizeEachWord(input);
+            document.getElementById('textOutput').value = applyTransformation(input);
+        }
+
+        document.getElementById('textInput').addEventListener('input', updateOutput);
+
+        document.getElementById('uppercaseButton').addEventListener('click', () => {
+            transformation = 'uppercase';
+            updateOutput();
         });
 
-        function copyText() {
+        document.getElementById('lowercaseButton').addEventListener('click', () => {
+            transformation = 'lowercase';
+            updateOutput();
+        });
+
+        document.getElementById('capitalizeButton').addEventListener('click', () => {
+            transformation = 'capitalize';
+            updateOutput();
+        });
+
+        document.getElementById('addHyphenButton').addEventListener('click', () => {
+            transformation = 'hyphen';
+            updateOutput();
+        });
+
+        document.getElementById('addUnderscoreButton').addEventListener('click', () => {
+            transformation = 'underscore';
+            updateOutput();
+        });
+
+        document.getElementById('removeSpacesButton').addEventListener('click', () => {
+            transformation = 'removeSpaces';
+            updateOutput();
+        });
+
+        document.getElementById('reverseButton').addEventListener('click', () => {
+            transformation = 'reverse';
+            updateOutput();
+        });
+
+        document.getElementById('copyButton').addEventListener('click', () => {
             const textOutput = document.getElementById('textOutput');
             textOutput.select();
             document.execCommand('copy');
@@ -111,24 +193,7 @@
             const message = document.getElementById('message');
             message.textContent = 'Text copied to clipboard!';
             setTimeout(() => message.textContent = '', 2000); // Clear the message after 2 seconds
-        }
-
-        document.getElementById('uppercaseButton').addEventListener('click', () => {
-            const input = document.getElementById('textInput').value.toUpperCase();
-            document.getElementById('textOutput').value = input;
         });
-
-        document.getElementById('lowercaseButton').addEventListener('click', () => {
-            const input = document.getElementById('textInput').value.toLowerCase();
-            document.getElementById('textOutput').value = input;
-        });
-
-        document.getElementById('capitalizeButton').addEventListener('click', () => {
-            const input = document.getElementById('textInput').value;
-            document.getElementById('textOutput').value = capitalizeEachWord(input);
-        });
-
-        document.getElementById('copyButton').addEventListener('click', copyText);
     </script>
 </body>
 </html>
