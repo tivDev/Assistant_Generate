@@ -63,13 +63,15 @@
     <script>
         function formatPhoneNumber() {
             const input = document.getElementById('phoneInput').value;
-            // Remove all non-digit characters
-            const cleaned = input.replace(/\D+/g, '');
-            // Insert a space after every 3 digits, except before the last 4 digits
-            const formatted = cleaned
-                .replace(/(\d{3})(?=\d)/g, '$1 ')
-                .replace(/(\d{3})$/, ' $1') // Ensure the last 4 digits are grouped correctly
-                .trim();
+            const cleaned = input.replace(/\D/g, '');
+            let formatted = cleaned;
+
+            if (cleaned.length === 10) {
+                formatted = `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6, 10)}`;
+            } else if (cleaned.length === 9) {
+                formatted = `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6, 9)}`;
+            }
+
             document.getElementById('formattedOutput').value = formatted;
         }
 
