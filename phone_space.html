@@ -1,59 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/phone_space.css">
     <title>Phone Number Formatter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background: #000;
-        }
-        .container {
-            width: 80%;
-            max-width: 600px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        textarea, input {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #message {
-            color: green;
-            font-weight: bold;
-        }
-    </style>
 </head>
+
 <body>
+    <nav class="navbar">
+        <a href="index.html">
+            <i class="fa-solid fa-house-chimney-window"></i>
+            Home
+        </a>
+    </nav>
     <div class="container">
-        <h1 class="text-center">Phone Number Formatter</h1>
+        <h2 class="text-center">Phone Number Formatter</h2>
         <input id="phoneInput" type="text" placeholder="Enter phone number here..." maxlength="10">
         <textarea id="formattedOutput" readonly placeholder="Formatted phone number will appear here..."></textarea>
         <button id="copyButton">Copy Text</button>
@@ -89,4 +55,5 @@
         document.getElementById('copyButton').addEventListener('click', copyText);
     </script>
 </body>
+
 </html>
