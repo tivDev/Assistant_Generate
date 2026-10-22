@@ -1,0 +1,1070 @@
+/* ==========================================================================
+   Apple iOS Human Interface Guidelines (HIG) Pattern Design System
+   ========================================================================== */
+:root {
+    /* iOS System Colors (Default: Light Mode) */
+    --ios-bg: #f2f2f7;
+    --ios-card-bg: #ffffff;
+    --ios-cell-bg: #ffffff;
+    --ios-cell-active: #e5e5ea;
+    --ios-input-bg: #e5e5ea;
+    --ios-grouped-header: #6c6c70;
+    
+    /* iOS Labels */
+    --ios-label-primary: #000000;
+    --ios-label-secondary: #8e8e93;
+    --ios-label-tertiary: #c7c7cc;
+    --ios-separator: rgba(60, 60, 67, 0.15);
+    
+    /* iOS Accent Colors */
+    --ios-blue: #007aff;
+    --ios-blue-pressed: #0056b3;
+    --ios-green: #34c759;
+    --ios-orange: #ff9500;
+    --ios-red: #ff3b30;
+    --ios-gray: #8e8e93;
+    --ios-segmented-bg: rgba(118, 118, 128, 0.12);
+    --ios-segmented-active-bg: #ffffff;
+    --ios-segmented-active-color: #000000;
+    --ios-segmented-active-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 3px 1px rgba(0, 0, 0, 0.04);
+    
+    /* Nav & Card Enhancements */
+    --ios-nav-bg: rgba(242, 242, 247, 0.85);
+    --ios-nav-border: rgba(60, 60, 67, 0.15);
+    --ios-card-border: rgba(60, 60, 67, 0.06);
+    --ios-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --ios-readonly-bg: rgba(0, 0, 0, 0.03);
+    --ios-readonly-color: #3c3c43;
+    --ios-hud-bg: rgba(255, 255, 255, 0.94);
+    --ios-hud-color: #000000;
+    --ios-hud-border: rgba(0, 0, 0, 0.12);
+    --ios-icon-btn-bg: rgba(0, 0, 0, 0.06);
+    --ios-icon-btn-hover: rgba(0, 0, 0, 0.12);
+    --ios-switch-track-off: #e9e9ea;
+
+    /* Radii */
+    --ios-radius-card: 13px;
+    --ios-radius-button: 12px;
+    --ios-radius-control: 9px;
+    --ios-radius-pill: 9999px;
+    
+    /* Font */
+    --ios-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* ==========================================================================
+   Dark Mode Overrides
+   ========================================================================== */
+html[data-theme="dark"],
+body[data-theme="dark"] {
+    --ios-bg: #000000;
+    --ios-card-bg: #1c1c1e;
+    --ios-cell-bg: #1c1c1e;
+    --ios-cell-active: #2c2c2e;
+    --ios-input-bg: #2c2c2e;
+    --ios-grouped-header: #8e8e93;
+    
+    --ios-label-primary: #ffffff;
+    --ios-label-secondary: #8e8e93;
+    --ios-label-tertiary: #636366;
+    --ios-separator: rgba(84, 84, 88, 0.45);
+    
+    --ios-blue: #0a84ff;
+    --ios-blue-pressed: #0064d6;
+    --ios-green: #30d158;
+    --ios-orange: #ff9f0a;
+    --ios-red: #ff453a;
+    --ios-gray: #3a3a3c;
+    --ios-segmented-bg: rgba(118, 118, 128, 0.24);
+    --ios-segmented-active-bg: #636366;
+    --ios-segmented-active-color: #ffffff;
+    --ios-segmented-active-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    
+    --ios-nav-bg: rgba(18, 18, 18, 0.85);
+    --ios-nav-border: rgba(255, 255, 255, 0.12);
+    --ios-card-border: rgba(255, 255, 255, 0.08);
+    --ios-card-shadow: none;
+    --ios-readonly-bg: rgba(255, 255, 255, 0.04);
+    --ios-readonly-color: #e5e5ea;
+    --ios-hud-bg: rgba(28, 28, 30, 0.94);
+    --ios-hud-color: #ffffff;
+    --ios-hud-border: rgba(255, 255, 255, 0.18);
+    --ios-icon-btn-bg: rgba(255, 255, 255, 0.08);
+    --ios-icon-btn-hover: rgba(255, 255, 255, 0.16);
+    --ios-switch-track-off: #39393d;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--ios-font);
+    background-color: var(--ios-bg);
+    color: var(--ios-label-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 60px 0;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.2px;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ==========================================================================
+   iOS Top Navigation Bar (Left Brand + Right Tabs)
+   ========================================================================== */
+.ios-segmented-wrapper {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--ios-nav-bg);
+    backdrop-filter: blur(25px) saturate(190%);
+    -webkit-backdrop-filter: blur(25px) saturate(190%);
+    border-bottom: 0.5px solid var(--ios-nav-border);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 0;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Nav Brand / Logo + Theme Toggle (Left Side) */
+.nav-brand-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    user-select: none;
+    cursor: default;
+}
+
+.nav-brand-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0a84ff, #0056b3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 13.5px;
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.35);
+}
+
+.nav-brand-info {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.nav-brand-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--ios-label-primary);
+}
+
+.nav-brand-badge {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(10, 132, 255, 0.18);
+    color: var(--ios-blue);
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.theme-toggle-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ios-icon-btn-bg);
+    border: none;
+    color: var(--ios-label-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--ios-icon-btn-hover);
+    transform: scale(1.08);
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.92);
+}
+
+/* Tabs List (Right Side) */
+.ios-segmented-control {
+    display: flex;
+    background: var(--ios-segmented-bg);
+    border-radius: var(--ios-radius-control);
+    padding: 3px;
+    gap: 3px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.ios-segmented-wrapper .ios-segmented-control {
+    flex-shrink: 1;
+    max-width: fit-content;
+}
+
+.ios-segmented-control::-webkit-scrollbar {
+    display: none;
+}
+
+.segmented-item {
+    flex: 1 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 11px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--ios-label-secondary);
+    font-family: var(--ios-font);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+}
+
+.segmented-item i {
+    font-size: 13px;
+}
+
+.segmented-item:hover {
+    color: var(--ios-label-primary);
+}
+
+.segmented-item.active {
+    background: var(--ios-segmented-active-bg);
+    color: var(--ios-segmented-active-color);
+    font-weight: 600;
+    box-shadow: var(--ios-segmented-active-shadow);
+}
+
+/* ==========================================================================
+   iOS Inset Grouped Sections
+   ========================================================================== */
+.ios-main-wrapper {
+    width: 100%;
+    max-width: 640px;
+    margin-top: 24px;
+    padding: 0 16px;
+}
+
+.tab-panel {
+    display: none;
+    animation: iosFadeIn 0.2s ease-out;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+@keyframes iosFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.ios-group-title {
+    font-size: 12.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--ios-grouped-header);
+    padding: 0 16px 8px;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ios-group-card {
+    background: var(--ios-card-bg);
+    border-radius: var(--ios-radius-card);
+    border: 0.5px solid var(--ios-card-border);
+    box-shadow: var(--ios-card-shadow);
+    overflow: hidden;
+    margin-bottom: 18px;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* ==========================================================================
+   iOS Inset Cells & Hairline Separators
+   ========================================================================== */
+.ios-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 16px;
+    border-bottom: 0.5px solid var(--ios-separator);
+    min-height: 48px;
+}
+
+.ios-cell:last-child {
+    border-bottom: none;
+}
+
+.cell-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.cell-title {
+    font-size: 15.5px;
+    color: var(--ios-label-primary);
+}
+
+.cell-subtitle {
+    font-size: 13px;
+    color: var(--ios-label-secondary);
+    margin-top: 2px;
+}
+
+/* ==========================================================================
+   iOS Standard Toggle Switch
+   ========================================================================== */
+.ios-switch {
+    position: relative;
+    display: inline-block;
+    width: 51px;
+    height: 31px;
+    flex-shrink: 0;
+}
+
+.ios-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.switch-track {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #39393d;
+    border-radius: 31px;
+    transition: background-color 0.25s ease;
+}
+
+.switch-track::before {
+    position: absolute;
+    content: "";
+    height: 27px;
+    width: 27px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.ios-switch input:checked + .switch-track {
+    background-color: var(--ios-green);
+}
+
+.ios-switch input:checked + .switch-track::before {
+    transform: translateX(20px);
+}
+
+/* ==========================================================================
+   iOS Slider & Range
+   ========================================================================== */
+.slider-cell {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.ios-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: #3a3a3c;
+    outline: none;
+}
+
+.ios-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+    transition: transform 0.15s ease;
+}
+
+.ios-slider::-webkit-slider-thumb:active {
+    transform: scale(1.1);
+}
+
+.slider-val-badge {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ios-blue);
+    min-width: 30px;
+    text-align: right;
+}
+
+/* ==========================================================================
+   iOS Text Display & Inset Inputs
+   ========================================================================== */
+.ios-display-box {
+    display: flex;
+    align-items: center;
+    padding: 12px 14px;
+    background: var(--ios-card-bg);
+    border-radius: var(--ios-radius-card);
+    border: 0.5px solid var(--ios-card-border);
+    box-shadow: var(--ios-card-shadow);
+    margin-bottom: 18px;
+    gap: 10px;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.ios-display-text {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: "SF Mono", Monaco, Menlo, Consolas, monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ios-blue);
+    letter-spacing: 0.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ios-display-text::placeholder {
+    font-family: var(--ios-font);
+    font-size: 14.5px;
+    font-weight: 400;
+    color: var(--ios-label-tertiary);
+}
+
+.ios-icon-btn {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ios-icon-btn-bg);
+    border: none;
+    border-radius: 50%;
+    color: var(--ios-label-primary);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.ios-icon-btn:hover {
+    background: var(--ios-icon-btn-hover);
+}
+
+.ios-icon-btn:active {
+    transform: scale(0.92);
+}
+
+.ios-icon-btn.primary {
+    background: var(--ios-blue);
+    color: #ffffff;
+}
+
+.ios-icon-btn.primary:hover {
+    background: var(--ios-blue-pressed);
+}
+
+/* Textareas & Inputs */
+.ios-textarea {
+    width: 100%;
+    min-height: 100px;
+    background: var(--ios-input-bg);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--ios-label-primary);
+    font-family: var(--ios-font);
+    font-size: 15px;
+    line-height: 1.45;
+    resize: vertical;
+    outline: none;
+    transition: box-shadow 0.2s ease;
+}
+
+.ios-textarea:focus, .ios-input:focus {
+    box-shadow: 0 0 0 2px var(--ios-blue);
+}
+
+.ios-textarea[readonly] {
+    background: var(--ios-readonly-bg);
+    color: var(--ios-readonly-color);
+}
+
+.ios-input {
+    width: 100%;
+    background: var(--ios-input-bg);
+    border: none;
+    border-radius: 10px;
+    padding: 13px 14px;
+    color: var(--ios-label-primary);
+    font-family: var(--ios-font);
+    font-size: 16px;
+    outline: none;
+}
+
+/* ==========================================================================
+   iOS Buttons
+   ========================================================================== */
+.ios-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    border-radius: var(--ios-radius-button);
+    border: none;
+    font-family: var(--ios-font);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s ease, opacity 0.12s ease, background 0.15s ease;
+}
+
+.ios-btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+.ios-btn-primary {
+    background-color: var(--ios-blue);
+    color: #ffffff;
+}
+
+.ios-btn-primary:hover {
+    background-color: var(--ios-blue-pressed);
+}
+
+.ios-link-btn {
+    background: transparent;
+    border: none;
+    color: var(--ios-blue);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.ios-link-btn.destructive {
+    color: var(--ios-red);
+}
+
+/* ==========================================================================
+   Tool-Specific: Text Converter Action Pills
+   ========================================================================== */
+.ios-pills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 12px 0 16px;
+}
+
+.ios-pill-btn {
+    padding: 11px 12px;
+    background: var(--ios-card-bg);
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: var(--ios-label-primary);
+    font-family: var(--ios-font);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.ios-pill-btn:hover {
+    background: var(--ios-cell-active);
+}
+
+.ios-pill-btn:active {
+    transform: scale(0.97);
+}
+
+.ios-pill-btn.active {
+    background: var(--ios-blue);
+    color: #ffffff;
+    border-color: transparent;
+}
+
+/* ==========================================================================
+   Tool-Specific: Custom Select (Picker)
+   ========================================================================== */
+.ios-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.ios-select {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--ios-input-bg);
+    border: none;
+    border-radius: 10px;
+    color: var(--ios-label-primary);
+    font-family: var(--ios-font);
+    font-size: 15px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.ios-select optgroup {
+    background-color: var(--ios-card-bg);
+    color: var(--ios-label-secondary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.ios-select option {
+    background-color: var(--ios-cell-active);
+    color: var(--ios-label-primary);
+    font-size: 14.5px;
+    padding: 6px 10px;
+}
+
+.ios-select-chevron {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ios-label-secondary);
+    pointer-events: none;
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   Tool-Specific: Strength Pill
+   ========================================================================== */
+.strength-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px 6px;
+    font-size: 13px;
+    color: var(--ios-label-secondary);
+}
+
+.strength-track {
+    height: 5px;
+    background: var(--ios-input-bg);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 18px;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+/* ==========================================================================
+   iOS HUD Dynamic Island Toast
+   ========================================================================== */
+.ios-hud-container {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.ios-hud {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 18px;
+    background: var(--ios-hud-bg);
+    backdrop-filter: blur(25px) saturate(190%);
+    -webkit-backdrop-filter: blur(25px) saturate(190%);
+    border: 0.5px solid var(--ios-hud-border);
+    border-radius: var(--ios-radius-pill);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    color: var(--ios-hud-color);
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(-16px) scale(0.92);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ios-hud.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.ios-hud i {
+    color: var(--ios-green);
+    font-size: 15px;
+}
+
+/* ==========================================================================
+   Tool-Specific: QR Code Generator
+   ========================================================================== */
+.qr-preview-card {
+    background: #ffffff;
+    border-radius: var(--ios-radius-card);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0 18px;
+    min-height: 250px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.qr-canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    background: #ffffff;
+}
+
+/* Allow qrcode.js inline style (display: none / display: block) to properly toggle canvas/img */
+.qr-canvas-wrapper canvas,
+.qr-canvas-wrapper img {
+    max-width: 100%;
+    height: auto;
+}
+
+.qr-canvas-wrapper canvas[style*="display: none"] {
+    display: none !important;
+}
+
+.qr-actions-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.qr-actions-row .ios-btn {
+    flex: 1;
+}
+
+/* ==========================================================================
+   Tool-Specific: Developer Utilities (JSON & Encoders)
+   ========================================================================== */
+.dev-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.dev-status-bar.valid {
+    background: rgba(48, 209, 88, 0.12);
+    color: var(--ios-green);
+    border: 1px solid rgba(48, 209, 88, 0.3);
+}
+
+.dev-status-bar.invalid {
+    background: rgba(255, 69, 58, 0.12);
+    color: var(--ios-red);
+    border: 1px solid rgba(255, 69, 58, 0.3);
+}
+
+.dev-status-bar.idle {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ios-label-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.font-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    font-size: 13.5px !important;
+    line-height: 1.45 !important;
+    tab-size: 2;
+}
+
+/* ==========================================================================
+   Tool-Specific: Timestamp Module
+   ========================================================================== */
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(48, 209, 88, 0.15);
+    color: var(--ios-green);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ios-green);
+    animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================================================
+   Tool-Specific: Color Studio
+   ========================================================================== */
+.color-preview-box {
+    width: 100%;
+    height: 120px;
+    border-radius: var(--ios-radius-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.color-preview-text {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    transition: color 0.2s ease;
+}
+
+.color-swatch-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.color-swatch {
+    flex: 1;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.color-swatch:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.contrast-badge {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.contrast-badge.pass {
+    background: rgba(48, 209, 88, 0.2);
+    color: var(--ios-green);
+    border: 1px solid rgba(48, 209, 88, 0.35);
+}
+
+.contrast-badge.fail {
+    background: rgba(255, 69, 58, 0.2);
+    color: var(--ios-red);
+    border: 1px solid rgba(255, 69, 58, 0.35);
+}
+
+/* ==========================================================================
+   Tool-Specific: Randomizer
+   ========================================================================== */
+.random-result-box {
+    text-align: center;
+    padding: 24px 16px;
+    background: var(--ios-card-bg);
+    border-radius: var(--ios-radius-card);
+    margin-bottom: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.random-result-value {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--ios-label-primary);
+    letter-spacing: -0.5px;
+    word-break: break-all;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   Global Helper: Recent Clipboard History Drawer
+   ========================================================================== */
+.ios-history-wrapper {
+    width: 100%;
+    max-width: 640px;
+    margin-top: 36px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px 16px 0;
+}
+
+.history-toggle-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 6px 4px;
+    color: var(--ios-label-secondary);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    user-select: none;
+}
+
+.history-toggle-header:hover {
+    color: var(--ios-label-primary);
+}
+
+.history-items-list {
+    margin-top: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-items-list.show {
+    display: flex;
+}
+
+.history-item-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--ios-card-bg);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.15s ease;
+}
+
+.history-item-card:hover {
+    background: var(--ios-cell-active);
+}
+
+.history-item-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 80%;
+    color: #e5e5ea;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12.5px;
+}
+
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 0 0 50px;
+    }
+
+    .ios-segmented-wrapper {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .nav-brand-title,
+    .nav-brand-badge {
+        display: none;
+    }
+
+    .ios-main-wrapper,
+    .ios-history-wrapper {
+        padding: 0 12px;
+    }
+
+    .ios-main-wrapper {
+        margin-top: 18px;
+    }
+
+    .segmented-item {
+        padding: 7px 6px;
+        font-size: 12px;
+        gap: 5px;
+    }
+
+    .segmented-item i {
+        font-size: 11px;
+    }
+
+    .ios-pills-grid {
+        grid-template-columns: 1fr;
+    }
+}

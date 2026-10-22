@@ -3,23 +3,746 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assistant Generate</title>
+    <title>Assistant - Utility Suite</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Instant Theme Initializer (Default: Light Mode) -->
+    <script>
+        (function() {
+            try {
+                var saved = localStorage.getItem('assistant_theme');
+                var theme = (saved === 'dark') ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch(e) {}
+        })();
+    </script>
 </head>
 <body>
-    <div class="container">
-        <main>
-            <h1>Assistant Generate</h1>
-            <p>This tool can generate some common things for you. Choose an option below to get started:</p>
-            <ul>
-                <li><a href="generate_password.html"><i class="fas fa-key"></i> Password generator</a></li>
-                <li><a href="text_convert.html"><i class="fas fa-text-height"></i> Text converter</a></li>
-                <li><a href="bullet_formater.html"><i class="fas fa-list"></i> Bullet point formatter</a></li>
-                <li><a href="phone_space.html"><i class="fas fa-phone"></i> Format phone number</a></li>
-            </ul>
-        </main>
+
+    <!-- Sticky Full-Screen Top Navigation Bar -->
+    <nav class="ios-segmented-wrapper" aria-label="Tool selection">
+        <!-- Left: Brand / Logo + Theme Toggle -->
+        <div class="nav-brand-group">
+            <div class="nav-brand">
+                <div class="nav-brand-icon">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                </div>
+                <div class="nav-brand-info">
+                    <span class="nav-brand-title">Assistant</span>
+                    <span class="nav-brand-badge">PRO</span>
+                </div>
+            </div>
+            <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
+                <i class="fas fa-moon" id="themeToggleIcon"></i>
+            </button>
+        </div>
+
+        <!-- Right: Tab Navigation Items -->
+        <div class="ios-segmented-control" role="tablist">
+            <button class="segmented-item active" data-tab="password" role="tab" aria-selected="true">
+                <i class="fas fa-key"></i>
+                <span>Password</span>
+            </button>
+            <button class="segmented-item" data-tab="text" role="tab" aria-selected="false">
+                <i class="fas fa-text-height"></i>
+                <span>Text</span>
+            </button>
+            <button class="segmented-item" data-tab="bullet" role="tab" aria-selected="false">
+                <i class="fas fa-list-ul"></i>
+                <span>Bullets</span>
+            </button>
+            <button class="segmented-item" data-tab="phone" role="tab" aria-selected="false">
+                <i class="fas fa-phone"></i>
+                <span>Phone</span>
+            </button>
+            <button class="segmented-item" data-tab="qr" role="tab" aria-selected="false">
+                <i class="fas fa-qrcode"></i>
+                <span>QR Code</span>
+            </button>
+            <button class="segmented-item" data-tab="dev" role="tab" aria-selected="false">
+                <i class="fas fa-code"></i>
+                <span>Dev Tools</span>
+            </button>
+            <button class="segmented-item" data-tab="time" role="tab" aria-selected="false">
+                <i class="fas fa-clock"></i>
+                <span>Time</span>
+            </button>
+            <button class="segmented-item" data-tab="color" role="tab" aria-selected="false">
+                <i class="fas fa-palette"></i>
+                <span>Color</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="ios-main-wrapper">
+
+        <!-- =============================================================== -->
+        <!-- Tab 1: Password Generator (Settings Style)                 -->
+        <!-- =============================================================== -->
+        <section class="tab-panel active" id="tab-password" role="tabpanel">
+            
+            <!-- Password Mode Switcher -->
+            <div class="ios-segmented-control" style="margin-bottom: 16px;">
+                <button class="segmented-item pw-mode-btn active" data-mode="random">
+                    <i class="fas fa-shield-halved"></i> Strong Random
+                </button>
+                <button class="segmented-item pw-mode-btn" data-mode="passphrase">
+                    <i class="fas fa-quote-right"></i> Passphrase (Words)
+                </button>
+            </div>
+
+            <!-- Result Box -->
+            <div class="ios-display-box">
+                <input type="text" id="passwordDisplay" class="ios-display-text" readonly placeholder="Generating password...">
+                <button id="regenPassword" class="ios-icon-btn" title="Regenerate" aria-label="Regenerate">
+                    <i class="fas fa-rotate"></i>
+                </button>
+                <button id="copyPassword" class="ios-icon-btn primary" title="Copy Password" aria-label="Copy">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+
+            <!-- Password Strength Bar -->
+            <div class="strength-meta-row">
+                <span>Security Level</span>
+                <span id="strengthText" style="font-weight: 600;">Strong</span>
+            </div>
+            <div class="strength-track">
+                <div id="strengthProgress" class="strength-fill"></div>
+            </div>
+
+            <!-- Inset Group: Length -->
+            <div class="ios-group-title">Password Length</div>
+            <div class="ios-group-card">
+                <div class="ios-cell">
+                    <div class="slider-cell">
+                        <input type="range" id="pwLength" class="ios-slider" min="6" max="48" value="16">
+                        <span id="pwLengthVal" class="slider-val-badge">16</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inset Group: Options with Switches -->
+            <div class="ios-group-title">Character Sets</div>
+            <div class="ios-group-card">
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Uppercase Letters</span>
+                        <span class="cell-subtitle">A B C D E F G ...</span>
+                    </div>
+                    <label class="ios-switch">
+                        <input type="checkbox" id="optUpper" checked>
+                        <span class="switch-track"></span>
+                    </label>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Lowercase Letters</span>
+                        <span class="cell-subtitle">a b c d e f g ...</span>
+                    </div>
+                    <label class="ios-switch">
+                        <input type="checkbox" id="optLower" checked>
+                        <span class="switch-track"></span>
+                    </label>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Numbers</span>
+                        <span class="cell-subtitle">0 1 2 3 4 5 6 7 8 9</span>
+                    </div>
+                    <label class="ios-switch">
+                        <input type="checkbox" id="optNumbers" checked>
+                        <span class="switch-track"></span>
+                    </label>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Special Characters</span>
+                        <span class="cell-subtitle">! @ # $ % ^ &amp; * ( )</span>
+                    </div>
+                    <label class="ios-switch">
+                        <input type="checkbox" id="optSymbols" checked>
+                        <span class="switch-track"></span>
+                    </label>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Exclude Lookalikes</span>
+                        <span class="cell-subtitle">Avoid 0, O, 1, l, I</span>
+                    </div>
+                    <label class="ios-switch">
+                        <input type="checkbox" id="optExcludeAmbiguous">
+                        <span class="switch-track"></span>
+                    </label>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- Tab 2: Text Converter (Notes Style)                        -->
+        <!-- =============================================================== -->
+        <section class="tab-panel" id="tab-text" role="tabpanel">
+            
+            <div class="ios-group-title">
+                <span>Input Text</span>
+                <div>
+                    <span id="tcInputCount" style="color: var(--ios-label-secondary); margin-right: 12px; font-size: 12px;">0 chars</span>
+                    <button id="tcClear" class="ios-link-btn destructive">Clear</button>
+                </div>
+            </div>
+            <div class="ios-group-card" style="padding: 10px;">
+                <textarea id="tcInput" class="ios-textarea" placeholder="Type or paste text here..."></textarea>
+            </div>
+
+            <!-- Transformations Grid -->
+            <div class="ios-group-title">Transformation</div>
+            <div class="ios-pills-grid">
+                <button class="ios-pill-btn" data-transform="uppercase">
+                    <i class="fas fa-arrow-up"></i> UPPERCASE
+                </button>
+                <button class="ios-pill-btn" data-transform="lowercase">
+                    <i class="fas fa-arrow-down"></i> lowercase
+                </button>
+                <button class="ios-pill-btn" data-transform="capitalize">
+                    <i class="fas fa-heading"></i> Title Case
+                </button>
+                <button class="ios-pill-btn" data-transform="sentence">
+                    <i class="fas fa-paragraph"></i> Sentence case
+                </button>
+                <button class="ios-pill-btn" data-transform="hyphen">
+                    <i class="fas fa-minus"></i> Add-Hyphens
+                </button>
+                <button class="ios-pill-btn" data-transform="underscore">
+                    <i class="fas fa-underline"></i> Add_Underscores
+                </button>
+                <button class="ios-pill-btn" data-transform="removeSpaces">
+                    <i class="fas fa-compress"></i> Remove Spaces
+                </button>
+                <button class="ios-pill-btn" data-transform="reverse">
+                    <i class="fas fa-retweet"></i> Reverse Text
+                </button>
+                <button class="ios-pill-btn" data-transform="camelCase">
+                    <i class="fas fa-code"></i> camelCase
+                </button>
+                <button class="ios-pill-btn" data-transform="pascalCase">
+                    <i class="fas fa-code"></i> PascalCase
+                </button>
+                <button class="ios-pill-btn" data-transform="snakeCase">
+                    <i class="fas fa-code"></i> snake_case
+                </button>
+                <button class="ios-pill-btn" data-transform="kebabCase">
+                    <i class="fas fa-code"></i> kebab-case
+                </button>
+                <button class="ios-pill-btn" data-transform="constantCase">
+                    <i class="fas fa-code"></i> CONSTANT_CASE
+                </button>
+                <button class="ios-pill-btn" data-transform="slugify">
+                    <i class="fas fa-link"></i> URL-slugify
+                </button>
+            </div>
+
+            <!-- Line Hygiene Grid -->
+            <div class="ios-group-title">Line Operations</div>
+            <div class="ios-pills-grid">
+                <button class="ios-pill-btn" data-transform="sortAsc">
+                    <i class="fas fa-arrow-down-a-z"></i> Sort (A → Z)
+                </button>
+                <button class="ios-pill-btn" data-transform="sortDesc">
+                    <i class="fas fa-arrow-up-z-a"></i> Sort (Z → A)
+                </button>
+                <button class="ios-pill-btn" data-transform="uniqueLines">
+                    <i class="fas fa-filter"></i> Deduplicate Lines
+                </button>
+                <button class="ios-pill-btn" data-transform="trimLines">
+                    <i class="fas fa-crop-simple"></i> Trim Empty Lines
+                </button>
+            </div>
+
+            <div class="ios-group-title">
+                <span>Result</span>
+                <span id="tcOutputCount" style="font-size: 12px;">0 chars</span>
+            </div>
+            <div class="ios-group-card" style="padding: 10px; margin-bottom: 20px;">
+                <textarea id="tcOutput" class="ios-textarea" readonly placeholder="Transformed text will appear here..."></textarea>
+            </div>
+
+            <button id="tcCopy" class="ios-btn ios-btn-primary">
+                <i class="fas fa-copy"></i> Copy Text
+            </button>
+
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- Tab 3: Bullet Formatter (Reminders Style)                  -->
+        <!-- =============================================================== -->
+        <section class="tab-panel" id="tab-bullet" role="tabpanel">
+
+            <div class="ios-group-title">Bullet Style</div>
+            <div class="ios-group-card">
+                <div class="ios-cell">
+                    <div class="ios-select-wrapper">
+                        <select id="bfDropdown" class="ios-select">
+                            <optgroup label="Numbered &amp; Ordered">
+                                <option value="123">1, 2, 3 (Numbers)</option>
+                                <option value="abc">a, b, c (Lowercase Alphabet)</option>
+                                <option value="ABC">A, B, C (Uppercase Alphabet)</option>
+                                <option value="roman_upper">I, II, III (Roman Numerals)</option>
+                                <option value="roman_lower">i, ii, iii (Lowercase Roman)</option>
+                            </optgroup>
+                            <optgroup label="Bullets &amp; Symbols">
+                                <option value="•" selected>• Classic Dot</option>
+                                <option value="●">● Solid Circle</option>
+                                <option value="➤">➤ Right Arrow</option>
+                                <option value="➜">➜ Modern Arrow</option>
+                                <option value="✓">✓ Checkmark</option>
+                                <option value="-">- Simple Dash</option>
+                                <option value="—">— Em Dash</option>
+                                <option value="★">★ Star</option>
+                                <option value="◆">◆ Diamond</option>
+                                <option value="+">+ Plus Sign</option>
+                                <option value="▪">▪ Square</option>
+                            </optgroup>
+                            <optgroup label="Tasks &amp; Markdown">
+                                <option value="- [ ] ">- [ ] Task Box (Markdown)</option>
+                                <option value="- [x] ">- [x] Completed Task</option>
+                                <option value="> ">&gt; Blockquote</option>
+                                <option value="custom">Custom Prefix / Tag...</option>
+                            </optgroup>
+                        </select>
+                        <i class="fas fa-chevron-down ios-select-chevron"></i>
+                    </div>
+                </div>
+                <div class="ios-cell" id="bfCustomRow" style="display: none;">
+                    <div class="cell-info">
+                        <span class="cell-title">Custom Prefix</span>
+                        <span class="cell-subtitle">Enter any text or emoji</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="text" id="bfCustomPrefix" class="ios-input" placeholder="e.g. 📌 " style="width: 110px; text-align: center; padding: 6px 10px; font-size: 14px;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indentation Options -->
+            <div class="ios-group-title">Indentation</div>
+            <div class="ios-group-card">
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Indent</span>
+                        <span class="cell-subtitle">Skip line 1 as header, bullets start on line 2</span>
+                    </div>
+                    <label class="ios-switch">
+                        <input type="checkbox" id="bfIndent">
+                        <span class="switch-track"></span>
+                    </label>
+                </div>
+                <div class="ios-cell" id="bfIndentRow" style="opacity: 0.5; transition: opacity 0.2s ease;">
+                    <div class="cell-info">
+                        <span class="cell-title">Blank Space Length</span>
+                        <span class="cell-subtitle">Number of spaces (default: 2)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="bfIndentSpaces" class="ios-input" min="1" max="20" value="2" style="width: 70px; text-align: center; padding: 6px 10px; font-weight: 600; font-size: 15px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="ios-group-title">
+                <span>Items (One per line)</span>
+                <button id="bfClear" class="ios-link-btn destructive">Clear</button>
+            </div>
+            <div class="ios-group-card" style="padding: 10px;">
+                <textarea id="bfInput" class="ios-textarea" placeholder="Item 1&#10;Item 2&#10;Item 3..."></textarea>
+            </div>
+
+            <div class="ios-group-title">Formatted Preview</div>
+            <div class="ios-group-card" style="padding: 10px; margin-bottom: 20px;">
+                <textarea id="bfOutput" class="ios-textarea" readonly placeholder="Formatted list will appear here..."></textarea>
+            </div>
+
+            <button id="bfCopy" class="ios-btn ios-btn-primary">
+                <i class="fas fa-copy"></i> Copy Formatted List
+            </button>
+
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- Tab 4: Phone Formatter (Phone Style)                       -->
+        <!-- =============================================================== -->
+        <section class="tab-panel" id="tab-phone" role="tabpanel">
+
+            <div class="ios-group-title">Format Style</div>
+            <div class="ios-segmented-control" style="margin-bottom: 18px;">
+                <button class="segmented-item phone-type-btn active" data-format="spaces">
+                    123 456 7890
+                </button>
+                <button class="segmented-item phone-type-btn" data-format="hyphens">
+                    123-456-7890
+                </button>
+                <button class="segmented-item phone-type-btn" data-format="parentheses">
+                    (123) 456-7890
+                </button>
+            </div>
+
+            <div class="ios-group-title">
+                <span>Enter Phone Number</span>
+                <div>
+                    <span id="phoneDigitsInfo" style="color: var(--ios-label-secondary); margin-right: 12px; font-size: 12px;">0/10 digits</span>
+                    <button id="phoneClear" class="ios-link-btn destructive">Clear</button>
+                </div>
+            </div>
+            <div class="ios-group-card" style="padding: 10px;">
+                <input type="text" id="phoneInput" class="ios-input" placeholder="e.g. 5551234567" maxlength="10" inputmode="numeric" pattern="[0-9]*">
+            </div>
+
+            <div class="ios-group-title">Formatted Result</div>
+            <div class="ios-group-card" style="padding: 10px; margin-bottom: 20px;">
+                <input type="text" id="phoneOutput" class="ios-input" readonly placeholder="Formatted number will appear here...">
+            </div>
+
+            <button id="phoneCopy" class="ios-btn ios-btn-primary">
+                <i class="fas fa-copy"></i> Copy Phone Number
+            </button>
+
+            <button id="phoneWhatsappBtn" class="ios-btn" style="margin-top: 10px; background: #25D366; color: #ffffff;">
+                <i class="fab fa-whatsapp"></i> Copy WhatsApp Link (wa.me)
+            </button>
+
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- Tab 5: QR Code Generator                                   -->
+        <!-- =============================================================== -->
+        <section class="tab-panel" id="tab-qr" role="tabpanel">
+
+            <div class="ios-group-title">
+                <span>Content / URL</span>
+                <div>
+                    <span id="qrInputCount" style="color: var(--ios-label-secondary); margin-right: 12px; font-size: 12px;">0 chars</span>
+                    <button id="qrClear" class="ios-link-btn destructive">Clear</button>
+                </div>
+            </div>
+            <div class="ios-group-card" style="padding: 10px;">
+                <textarea id="qrInput" class="ios-textarea" placeholder="Enter URL, text, or Wi-Fi info here..." style="min-height: 80px;">https://apple.com</textarea>
+            </div>
+
+            <!-- Quick Template Presets -->
+            <div class="ios-group-title">Quick Templates</div>
+            <div class="ios-pills-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 14px;">
+                <button type="button" class="ios-pill-btn" id="qrTplUrl">
+                    <i class="fas fa-globe"></i> Website
+                </button>
+                <button type="button" class="ios-pill-btn" id="qrTplWifi">
+                    <i class="fas fa-wifi"></i> Wi-Fi
+                </button>
+                <button type="button" class="ios-pill-btn" id="qrTplText">
+                    <i class="fas fa-font"></i> Note
+                </button>
+            </div>
+
+            <!-- Settings -->
+            <div class="ios-group-title">Display Settings</div>
+            <div class="ios-group-card">
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Size</span>
+                        <span class="cell-subtitle">Output image dimensions</span>
+                    </div>
+                    <div class="ios-select-wrapper" style="width: 140px;">
+                        <select id="qrSizeSelect" class="ios-select" style="padding: 8px 12px; font-size: 13.5px;">
+                            <option value="160">160 × 160 px</option>
+                            <option value="220" selected>220 × 220 px</option>
+                            <option value="300">300 × 300 px</option>
+                        </select>
+                        <i class="fas fa-chevron-down ios-select-chevron"></i>
+                    </div>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Error Correction</span>
+                        <span class="cell-subtitle">Damage recovery tolerance</span>
+                    </div>
+                    <div class="ios-select-wrapper" style="width: 140px;">
+                        <select id="qrLevelSelect" class="ios-select" style="padding: 8px 12px; font-size: 13.5px;">
+                            <option value="L">Low (7%)</option>
+                            <option value="M">Medium (15%)</option>
+                            <option value="Q">Quartile (25%)</option>
+                            <option value="H" selected>High (30%)</option>
+                        </select>
+                        <i class="fas fa-chevron-down ios-select-chevron"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Preview Card -->
+            <div class="ios-group-title">Live Preview</div>
+            <div class="qr-preview-card">
+                <div id="qrCanvasWrapper" class="qr-canvas-wrapper"></div>
+                <span style="color: #636366; font-size: 12px; margin-top: 14px; font-weight: 500;">
+                    <i class="fas fa-camera"></i> Point camera to scan
+                </span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="qr-actions-row">
+                <button id="qrCopyBtn" class="ios-btn" style="background: var(--ios-cell-active); color: #fff;">
+                    <i class="fas fa-copy"></i> Copy Image
+                </button>
+                <button id="qrDownloadBtn" class="ios-btn ios-btn-primary">
+                    <i class="fas fa-download"></i> Download PNG
+                </button>
+            </div>
+
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- Tab 6: Developer Tools (JSON & Encoders)                   -->
+        <!-- =============================================================== -->
+        <section class="tab-panel" id="tab-dev" role="tabpanel">
+
+            <div class="ios-group-title">
+                <span>Input Data</span>
+                <div>
+                    <button id="devSampleBtn" class="ios-link-btn" style="margin-right: 12px;">Sample JSON</button>
+                    <span id="devInputCount" style="color: var(--ios-label-secondary); margin-right: 12px; font-size: 12px;">0 chars</span>
+                    <button id="devClear" class="ios-link-btn destructive">Clear</button>
+                </div>
+            </div>
+            <div class="ios-group-card" style="padding: 10px;">
+                <textarea id="devInput" class="ios-textarea font-mono" placeholder="Paste JSON, Base64, or URL encoded string here..." style="min-height: 110px;"></textarea>
+            </div>
+
+            <!-- Real-Time Status / Syntax Validator -->
+            <div id="devStatus" class="dev-status-bar idle">
+                <span id="devStatusText"><i class="fas fa-circle-info"></i> Ready for transformation</span>
+                <span id="devStatusMeta" style="font-size: 11px; opacity: 0.8;"></span>
+            </div>
+
+            <!-- Actions Grid -->
+            <div class="ios-group-title">JSON Operations</div>
+            <div class="ios-pills-grid" style="margin-bottom: 14px;">
+                <button class="ios-pill-btn dev-action-btn" data-action="json-format-2">
+                    <i class="fas fa-align-left"></i> Format JSON (2-sp)
+                </button>
+                <button class="ios-pill-btn dev-action-btn" data-action="json-format-4">
+                    <i class="fas fa-indent"></i> Format JSON (4-sp)
+                </button>
+                <button class="ios-pill-btn dev-action-btn" data-action="json-minify">
+                    <i class="fas fa-compress-alt"></i> Minify JSON
+                </button>
+                <button class="ios-pill-btn dev-action-btn" data-action="json-validate">
+                    <i class="fas fa-check-double"></i> Validate JSON
+                </button>
+            </div>
+
+            <div class="ios-group-title">Encoding &amp; Escaping</div>
+            <div class="ios-pills-grid" style="margin-bottom: 14px;">
+                <button class="ios-pill-btn dev-action-btn" data-action="b64-encode">
+                    <i class="fas fa-lock"></i> Base64 Encode
+                </button>
+                <button class="ios-pill-btn dev-action-btn" data-action="b64-decode">
+                    <i class="fas fa-lock-open"></i> Base64 Decode
+                </button>
+                <button class="ios-pill-btn dev-action-btn" data-action="url-encode">
+                    <i class="fas fa-link"></i> URL Encode
+                </button>
+                <button class="ios-pill-btn dev-action-btn" data-action="url-decode">
+                    <i class="fas fa-unlink"></i> URL Decode
+                </button>
+                <button class="ios-pill-btn dev-action-btn" data-action="html-escape">
+                    <i class="fas fa-code"></i> HTML Escape
+                </button>
+                <button class="ios-pill-btn dev-action-btn" data-action="html-unescape">
+                    <i class="fas fa-file-code"></i> HTML Unescape
+                </button>
+            </div>
+
+            <div class="ios-group-title">
+                <span>Result</span>
+                <span id="devOutputCount" style="font-size: 12px;">0 chars</span>
+            </div>
+            <div class="ios-group-card" style="padding: 10px; margin-bottom: 20px;">
+                <textarea id="devOutput" class="ios-textarea font-mono" readonly placeholder="Output will appear here..." style="min-height: 120px;"></textarea>
+            </div>
+
+            <button id="devCopyBtn" class="ios-btn ios-btn-primary">
+                <i class="fas fa-copy"></i> Copy Result
+            </button>
+
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- Tab 7: Timestamp & Date Tools                              -->
+        <!-- =============================================================== -->
+        <section class="tab-panel" id="tab-time" role="tabpanel">
+
+            <!-- Live Current Time Box -->
+            <div class="ios-group-title">
+                <span>Current Real Time</span>
+                <span class="live-badge"><span class="live-dot"></span> Live</span>
+            </div>
+            <div class="ios-display-box" style="margin-bottom: 20px;">
+                <input type="text" id="liveEpochDisplay" class="ios-display-text font-mono" readonly placeholder="Loading timestamp...">
+                <button id="copyLiveEpoch" class="ios-icon-btn primary" title="Copy Current Epoch" aria-label="Copy">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+
+            <!-- Epoch to Human Converter -->
+            <div class="ios-group-title">
+                <span>Convert Unix Epoch to Date</span>
+                <button id="epochSetNowBtn" class="ios-link-btn">Set to Now</button>
+            </div>
+            <div class="ios-group-card" style="padding: 10px; margin-bottom: 12px;">
+                <input type="number" id="epochInput" class="ios-input font-mono" placeholder="e.g. 1792634102">
+            </div>
+
+            <div class="ios-group-title">Converted Results</div>
+            <div class="ios-group-card" style="margin-bottom: 20px;">
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Local Time</span>
+                        <span id="epochLocalRes" class="cell-subtitle font-mono" style="color: #fff; font-size: 14px; margin-top: 4px;">-</span>
+                    </div>
+                    <button class="ios-link-btn" id="copyLocalTimeBtn">Copy</button>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">UTC / ISO 8601</span>
+                        <span id="epochUtcRes" class="cell-subtitle font-mono" style="color: #fff; font-size: 14px; margin-top: 4px;">-</span>
+                    </div>
+                    <button class="ios-link-btn" id="copyUtcTimeBtn">Copy</button>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Relative Time</span>
+                        <span id="epochRelativeRes" class="cell-subtitle font-mono" style="color: var(--ios-blue); font-size: 13.5px; margin-top: 4px;">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date to Epoch Converter -->
+            <div class="ios-group-title">Convert Date &amp; Time to Epoch</div>
+            <div class="ios-group-card" style="padding: 10px; margin-bottom: 12px;">
+                <input type="datetime-local" id="datePickerInput" class="ios-input" style="color-scheme: dark;">
+            </div>
+            <div class="ios-group-card" style="margin-bottom: 20px;">
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Timestamp (Seconds)</span>
+                        <span id="dateToEpochSec" class="cell-subtitle font-mono" style="color: #fff; font-size: 14px; margin-top: 4px;">-</span>
+                    </div>
+                    <button class="ios-link-btn" id="copyEpochSecBtn">Copy</button>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Timestamp (Milliseconds)</span>
+                        <span id="dateToEpochMs" class="cell-subtitle font-mono" style="color: #fff; font-size: 14px; margin-top: 4px;">-</span>
+                    </div>
+                    <button class="ios-link-btn" id="copyEpochMsBtn">Copy</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- Tab 8: Color Studio & Contrast                             -->
+        <!-- =============================================================== -->
+        <section class="tab-panel" id="tab-color" role="tabpanel">
+
+            <div class="ios-group-title">Color Preview &amp; Picker</div>
+            <div id="colorPreviewBox" class="color-preview-box" style="background-color: #0A84FF;">
+                <span id="colorPreviewText" class="color-preview-text" style="color: #ffffff;">#0A84FF</span>
+            </div>
+
+            <div class="ios-group-card" style="margin-bottom: 18px;">
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Pick Color</span>
+                        <span class="cell-subtitle">Click swatch or type hex</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="color" id="colorPickerInput" value="#0a84ff" style="width: 38px; height: 38px; border-radius: 8px; border: none; cursor: pointer; background: transparent;">
+                        <input type="text" id="colorHexInput" class="ios-input font-mono" value="#0a84ff" style="width: 100px; padding: 6px 10px; text-transform: uppercase;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Color Format Values -->
+            <div class="ios-group-title">Color Formats</div>
+            <div class="ios-group-card" style="margin-bottom: 18px;">
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">HEX</span>
+                        <span id="colorHexVal" class="cell-subtitle font-mono" style="color: #fff; margin-top: 4px;">#0A84FF</span>
+                    </div>
+                    <button class="ios-link-btn" id="copyHexBtn">Copy</button>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">RGB</span>
+                        <span id="colorRgbVal" class="cell-subtitle font-mono" style="color: #fff; margin-top: 4px;">rgb(10, 132, 255)</span>
+                    </div>
+                    <button class="ios-link-btn" id="copyRgbBtn">Copy</button>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">HSL</span>
+                        <span id="colorHslVal" class="cell-subtitle font-mono" style="color: #fff; margin-top: 4px;">hsl(210, 100%, 52%)</span>
+                    </div>
+                    <button class="ios-link-btn" id="copyHslBtn">Copy</button>
+                </div>
+            </div>
+
+            <!-- Palette Shades -->
+            <div class="ios-group-title">Tints &amp; Shades Palette</div>
+            <div class="ios-group-card" style="padding: 12px; margin-bottom: 18px;">
+                <span class="cell-subtitle">Click any swatch to copy value</span>
+                <div class="color-swatch-row" id="colorSwatchesRow"></div>
+            </div>
+
+            <!-- WCAG Contrast Ratio Checker -->
+            <div class="ios-group-title">WCAG Contrast Checker</div>
+            <div class="ios-group-card" style="margin-bottom: 20px;">
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Contrast vs White Text</span>
+                        <span id="contrastWhiteRatio" class="cell-subtitle" style="font-size: 13px; margin-top: 4px;">-</span>
+                    </div>
+                    <span id="contrastWhiteBadge" class="contrast-badge pass">PASS</span>
+                </div>
+                <div class="ios-cell">
+                    <div class="cell-info">
+                        <span class="cell-title">Contrast vs Black Text</span>
+                        <span id="contrastBlackRatio" class="cell-subtitle" style="font-size: 13px; margin-top: 4px;">-</span>
+                    </div>
+                    <span id="contrastBlackBadge" class="contrast-badge fail">FAIL</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Recent Clipboard History Drawer -->
+    <div class="ios-history-wrapper">
+        <div class="history-toggle-header" id="historyToggleBtn">
+            <span><i class="fas fa-clock-rotate-left"></i> Recent Copies (<span id="historyCount">0</span>)</span>
+            <i class="fas fa-chevron-down" id="historyChevron" style="transition: transform 0.2s ease;"></i>
+        </div>
+        <div class="history-items-list" id="historyList"></div>
     </div>
+
+    <!-- Dynamic Island / HUD Notification -->
+    <div class="ios-hud-container">
+        <div id="iosHud" class="ios-hud"></div>
+    </div>
+
+    <!-- QR Code Generator Library -->
+    <script src="js/qrcode.min.js"></script>
+    <!-- Application Logic -->
+    <script src="js/app.js"></script>
 </body>
 </html>
